@@ -8,10 +8,11 @@
 # ███████║██║ ╚████║██║ ╚████║   ██║      ██║   ██║     ╚██████╗██║  ██║
 # ╚══════╝╚═╝  ╚═══╝╚═╝  ╚═══╝   ╚═╝      ╚═╝   ╚═╝      ╚═════╝╚═╝  ╚═╝
 # ==================================================
-# Script Name    : snnttech Ultimate Selector
+# Script Name    : snnttech ULTIMATE SELECTOR
 # Author         : snnttech
-# Version        : 1.0
-# Description    : V2Ray, Xray, MTProto, Bot, Backup, Docker, 3x-ui Manager
+# Version        : 2.0
+# Description    : V2Ray, Xray, MTProto, 3x-UI, Docker, Backup, Bot, 
+#                 WireGuard, OpenVPN, Shadowsocks, NPM, Portainer, FTP
 # ==================================================
 
 # Color codes
@@ -20,7 +21,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 # Root check function
 check_root() {
@@ -30,17 +31,17 @@ check_root() {
     fi
 }
 
-# Main menu
+# Show main menu
 show_menu() {
     clear
     echo -e "${CYAN}"
-    echo "╔══════════════════════════════════════════════════════════╗"
-    echo "║         s n n t t e c h   U L T I M A T E                ║"
-    echo "║                   S E L E C T O R                         ║"
-    echo "╚══════════════════════════════════════════════════════════╝"
+    echo "╔══════════════════════════════════════════════════════════════════╗"
+    echo "║              s n n t t e c h   U L T I M A T E                   ║"
+    echo "║                      S E L E C T O R  v2.0                       ║"
+    echo "╚══════════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
     echo -e "${GREEN}📌 MAIN MENU${NC}"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo -e "${YELLOW}1)${NC} V2Ray - Install / Manage"
     echo -e "${YELLOW}2)${NC} Xray - Install / Manage"
     echo -e "${YELLOW}3)${NC} MTProto - Install / Manage"
@@ -50,9 +51,16 @@ show_menu() {
     echo -e "${YELLOW}7)${NC} Telegram Bot Setup"
     echo -e "${YELLOW}8)${NC} System Status & Monitoring"
     echo -e "${YELLOW}9)${NC} Service Manager"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━ EXTRA TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${YELLOW}10)${NC} WireGuard - Install / Manage"
+    echo -e "${YELLOW}11)${NC} OpenVPN - Install / Manage"
+    echo -e "${YELLOW}12)${NC} Shadowsocks - Install / Manage"
+    echo -e "${YELLOW}13)${NC} Nginx Proxy Manager (NPM)"
+    echo -e "${YELLOW}14)${NC} Portainer (Docker Web UI)"
+    echo -e "${YELLOW}15)${NC} FTP Server (vsftpd) Setup"
     echo -e "${RED}0)${NC} Exit"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    read -p "👉 ကျေးဇူးပြု၍ ရွေးချယ်ပါ (0-9): " choice
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    read -p "👉 ကျေးဇူးပြု၍ ရွေးချယ်ပါ (0-15): " choice
 }
 
 # ==================== V2RAY ====================
@@ -171,7 +179,7 @@ def send_message(text):
 # System Info
 hostname = subprocess.getoutput("hostname")
 ip = subprocess.getoutput("curl -s ifconfig.me")
-send_message(f"✅ snnttech Server Online\nHostname: {hostname}\nIP: {ip}")
+send_message(f"✅ snnttech Server Online\\nHostname: {hostname}\\nIP: {ip}")
 EOF
     
     python3 /root/snnttech-bot.py
@@ -221,6 +229,120 @@ service_manager() {
     read -p "Enter နှိပ်ပြီး ဆက်ပါ..."
 }
 
+# ==================== WIREGUARD ====================
+install_wireguard() {
+    echo -e "${BLUE}🔒 WireGuard တပ်ဆင်နေပါသည်...${NC}"
+    apt update && apt install -y wireguard
+    cd /etc/wireguard
+    umask 077
+    wg genkey | tee privatekey | wg pubkey > publickey
+    echo -e "${GREEN}✅ WireGuard တပ်ဆင်ပြီးပါပြီ။${NC}"
+    echo -e "${YELLOW}Private Key: $(cat privatekey)${NC}"
+    echo -e "${YELLOW}Public Key: $(cat publickey)${NC}"
+    read -p "Enter နှိပ်ပြီး ဆက်ပါ..."
+}
+
+# ==================== OPENVPN ====================
+install_openvpn() {
+    echo -e "${BLUE}🔓 OpenVPN တပ်ဆင်နေပါသည်...${NC}"
+    apt update && apt install -y openvpn
+    wget https://git.io/vpn -O openvpn-install.sh
+    bash openvpn-install.sh
+    echo -e "${GREEN}✅ OpenVPN တပ်ဆင်ပြီးပါပြီ။${NC}"
+    read -p "Enter နှိပ်ပြီး ဆက်ပါ..."
+}
+
+# ==================== SHADOWSOCKS ====================
+install_shadowsocks() {
+    echo -e "${BLUE}🌐 Shadowsocks တပ်ဆင်နေပါသည်...${NC}"
+    apt update && apt install -y shadowsocks-libev
+    cat > /etc/shadowsocks-libev/config.json <<EOF
+{
+    "server": "0.0.0.0",
+    "server_port": 8388,
+    "password": "snnttech-ss-$(openssl rand -hex 4)",
+    "method": "chacha20-ietf-poly1305",
+    "fast_open": true
+}
+EOF
+    systemctl restart shadowsocks-libev
+    systemctl enable shadowsocks-libev
+    echo -e "${GREEN}✅ Shadowsocks တပ်ဆင်ပြီးပါပြီ။${NC}"
+    cat /etc/shadowsocks-libev/config.json
+    read -p "Enter နှိပ်ပြီး ဆက်ပါ..."
+}
+
+# ==================== NGINX PROXY MANAGER ====================
+install_npm() {
+    echo -e "${BLUE}🚀 Nginx Proxy Manager တပ်ဆင်နေပါသည်...${NC}"
+    apt update && apt install -y docker-compose
+    mkdir -p /root/npm
+    cd /root/npm
+    cat > docker-compose.yml <<EOF
+version: '3'
+services:
+  npm:
+    image: jc21/nginx-proxy-manager:latest
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 81:81
+      - 443:443
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+EOF
+    docker-compose up -d
+    echo -e "${GREEN}✅ Nginx Proxy Manager တပ်ဆင်ပြီးပါပြီ။${NC}"
+    echo -e "${YELLOW}Access: http://$(curl -s ifconfig.me):81${NC}"
+    echo -e "${YELLOW}Default Login: admin@example.com / changeme${NC}"
+    read -p "Enter နှိပ်ပြီး ဆက်ပါ..."
+}
+
+# ==================== PORTAINER ====================
+install_portainer() {
+    echo -e "${BLUE}🐳 Portainer တပ်ဆင်နေပါသည်...${NC}"
+    docker volume create portainer_data
+    docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -v portainer_data:/data \
+      portainer/portainer-ce:latest
+    echo -e "${GREEN}✅ Portainer တပ်ဆင်ပြီးပါပြီ။${NC}"
+    echo -e "${YELLOW}Access: https://$(curl -s ifconfig.me):9443${NC}"
+    read -p "Enter နှိပ်ပြီး ဆက်ပါ..."
+}
+
+# ==================== FTP SERVER ====================
+install_ftp() {
+    echo -e "${BLUE}📁 FTP Server (vsftpd) တပ်ဆင်နေပါသည်...${NC}"
+    apt update && apt install -y vsftpd
+    cp /etc/vsftpd.conf /etc/vsftpd.conf.bak
+    cat > /etc/vsftpd.conf <<EOF
+listen=YES
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+chroot_local_user=YES
+allow_writeable_chroot=YES
+pasv_enable=YES
+pasv_min_port=10000
+pasv_max_port=10100
+EOF
+    systemctl restart vsftpd
+    systemctl enable vsftpd
+    useradd -m ftpuser -s /bin/bash
+    echo "ftpuser:snnttech123" | chpasswd
+    echo -e "${GREEN}✅ FTP Server တပ်ဆင်ပြီးပါပြီ။${NC}"
+    echo -e "${YELLOW}FTP User: ftpuser${NC}"
+    echo -e "${YELLOW}FTP Password: snnttech123${NC}"
+    echo -e "${YELLOW}Port: 21${NC}"
+    read -p "Enter နှိပ်ပြီး ဆက်ပါ..."
+}
+
 # ==================== MAIN LOOP ====================
 while true; do
     show_menu
@@ -239,6 +361,20 @@ while true; do
         7) setup_bot ;;
         8) system_status ;;
         9) service_manager ;;
+        10) install_wireguard ;;
+        11) install_openvpn ;;
+        12) install_shadowsocks ;;
+        13) 
+            if ! command -v docker &> /dev/null; then
+                install_docker
+            fi
+            install_npm ;;
+        14)
+            if ! command -v docker &> /dev/null; then
+                install_docker
+            fi
+            install_portainer ;;
+        15) install_ftp ;;
         0) 
             echo -e "${GREEN}ကျေးဇူးတင်ပါတယ်။ နောက်မှပြန်တွေ့မယ်။${NC}"
             exit 0
